@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "kagikai": {
+      "url": "https://mcp.kaginet.com/sse",
+      "headers": {
+        "Authorization": "Bearer kagi_YOUR_API_KEY"
+      }
+    }
+  }
+}

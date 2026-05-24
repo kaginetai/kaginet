@@ -1,0 +1,108 @@
+{
+  "name": "Kaginet Payment Agent",
+  "description": "Bitcoin escrow payment service for AI agents. Creates, funds, and settles conditional escrow instruments using Bitcoin on-chain settlement with hardware-attested key lifecycle inside Intel TDX enclaves. Supports hash-match verification, human approval, and optimistic settlement with dispute bonds.",
+  "url": "https://mcp.kaginet.com",
+  "version": "1.4.2",
+  "protocolVersions": ["1.0"],
+  "provider": {
+    "organization": "Kagikai",
+    "url": "https://kaginet.com"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "extendedAgentCard": true
+  },
+  "securitySchemes": {
+    "bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "description": "API key from cloud.kaginet.com. Keys use the kagi_ prefix. Obtain one by signing up at the developer dashboard."
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ],
+  "skills": [
+    {
+      "id": "escrow-create",
+      "name": "Create Bitcoin Escrow",
+      "description": "Create a conditional Bitcoin escrow between two agents. Funds are locked in a Taproot 2-of-2 address and released when a condition is met. Conditions: hash_match, human_approval, optimistic. All keys generated inside Intel TDX hardware enclave.",
+      "tags": ["payment", "escrow", "bitcoin", "taproot", "conditional"],
+      "examples": [
+        "Create an escrow for 50000 sats with hash match condition",
+        "Set up a payment escrow to bc1q... for logo design work",
+        "Create an optimistic escrow with 3-block dispute window"
+      ]
+    },
+    {
+      "id": "escrow-fund",
+      "name": "Fund Escrow",
+      "description": "Send Bitcoin to fund a previously created escrow instrument. Returns the Taproot funding address and monitors for on-chain confirmation.",
+      "tags": ["payment", "funding", "bitcoin"],
+      "examples": [
+        "Fund escrow abc-123",
+        "Check if escrow xyz-789 has been funded"
+      ]
+    },
+    {
+      "id": "escrow-settle",
+      "name": "Settle Escrow",
+      "description": "Submit evidence to release escrowed funds. For hash_match: provide the deliverable for SHA-256 verification. For human_approval: request manual release. For optimistic: auto-releases after dispute window unless disputed.",
+      "tags": ["payment", "settlement", "verification"],
+      "examples": [
+        "Submit the completed document to release escrow abc-123",
+        "Check settlement status for escrow xyz-789"
+      ]
+    },
+    {
+      "id": "escrow-dispute",
+      "name": "Dispute Escrow",
+      "description": "File a dispute against an optimistic escrow during the dispute window. Requires funding a dispute bond. Bond is returned if the dispute is upheld.",
+      "tags": ["payment", "dispute", "escrow"],
+      "examples": [
+        "Dispute escrow abc-123 because the deliverable was incomplete"
+      ]
+    },
+    {
+      "id": "identity-verify",
+      "name": "Verify Agent Identity",
+      "description": "Verify an agent's payment identity and TEE attestation. Returns the agent's X25519 public key, reputation summary, and Intel TDX quote verification.",
+      "tags": ["identity", "attestation", "verification", "tee"],
+      "examples": [
+        "Verify agent identity for pubkey a1b2c3...",
+        "Check the attestation status of the payment server"
+      ]
+    },
+    {
+      "id": "fee-estimate",
+      "name": "Estimate Payment Fees",
+      "description": "Calculate the total cost of a payment including platform fee and Bitcoin mining fee estimate based on current mempool conditions.",
+      "tags": ["fees", "estimation", "bitcoin"],
+      "examples": [
+        "How much would it cost to escrow 100000 sats?",
+        "What are the current mining fees?"
+      ]
+    },
+    {
+      "id": "attestation",
+      "name": "TEE Attestation",
+      "description": "Retrieve the Intel TDX hardware attestation quote for the payment server. Proves all key operations run inside a tamper-resistant enclave. Quote can be verified against Intel's public root of trust.",
+      "tags": ["security", "attestation", "tee", "tdx"],
+      "examples": [
+        "Get the TDX attestation quote",
+        "Verify the payment server is running in a TEE"
+      ]
+    }
+  ],
+  "defaultInputModes": ["text"],
+  "defaultOutputModes": ["text"],
+  "supportedInterfaces": [
+    {
+      "protocolBinding": "urn:a2a:transport:sse",
+      "url": "https://mcp.kaginet.com/sse"
+    }
+  ]
+}
